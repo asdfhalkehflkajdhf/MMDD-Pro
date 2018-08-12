@@ -1,0 +1,59 @@
+%YAML 1.1
+---
+#If you have not understand place, please download the 'sz -be /etc/newiup/newiup-reference.doc' learning
+
+servers:
+  - CDRsrv1:
+    analyzelib:  libhtmlToDB.so:htmlToDb #.o 或 .so 文件
+    addr: 192.168.30.228:21
+    username: admin
+    passwd: 123123
+    finish-flag: 
+    file-suffix: 
+    thread-num: 1                   #[1-15]
+ 
+  - CDRsrv2:
+    analyzelib: libhtmlToDB.so:htmlToDb #.o 或 .so 文件
+    addr: 192.168.30.228:22
+    username: admin
+    passwd: 123123
+    finish-flag: abc #服务器端上传完成标记
+    file-suffix: info #服务器端上传后缀
+    thread-num: 1                   #[1-15]
+
+  - CDRsrv3:
+    analyzelib: libhtmlToDB.so:htmlToDb #.o 或 .so 文件
+    addr: 192.168.200.242:22
+    username: root
+    passwd: lzc123
+    finish-flag: ok
+    file-suffix: info
+    thread-num: 1
+
+monitor-group:
+  - CDRmonitor-1:
+    enable: yes                     #[yes/no]
+    monitor-dir: /home/workspace/html
+    monitor-file-type: ctr #监听文件类型
+    upload-find-act: cut        #[keep/replace/add/cut]
+    upload-file-type: #实际文件后缀
+    servers-primer: CDRsrv1
+    servers-backup: 
+    finish-act: keep              #[same-move/keep/delete/same-move-time/diff-move/diff-move-time] 
+    move-to: 
+
+global-config:
+    affinity: 0                     #[0-N/no]
+    max-upload: 10000
+    log-dir-path: /home/workspace/newiuplog
+    connect-timeout: 30             #unit [s]
+    data-expiration-time: 7         #unit [day]
+DBServer:
+##############mysql ####################
+    DBHost: 10.210.113.53
+    DBUser: root
+    DBPassWord: 123456
+    DBName: test
+    DBPort: 3306     #3306
+    DBSocket:
+##########################################
